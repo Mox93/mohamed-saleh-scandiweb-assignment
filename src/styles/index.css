@@ -15,6 +15,7 @@
 }
 
 html {
+  width: 100vw;
   min-width: 800px;
 }
 
@@ -57,11 +58,11 @@ a:focus {
   padding: 0 16px;
   display: flex;
   align-items: center;
-  text-decoration: inherit;
-  color: inherit;
   font-size: 16px;
   text-transform: uppercase;
-  border-bottom: 2px solid transparent;
+  border: 2px solid transparent;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 .category-list .element.selected {
@@ -136,6 +137,7 @@ a:focus {
 
 .category-page {
   margin: 80px 100px;
+  max-width: 1920px;
 }
 
 .category-page .title {
@@ -149,9 +151,9 @@ a:focus {
 
 .category-page .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  grid-column-gap: 40px;
-  grid-row-gap: 100px;
+  grid-template-columns: repeat(4, auto);
+  column-gap: 40px;
+  row-gap: 100px;
   justify-content: start;
 }
 
@@ -175,23 +177,23 @@ a:focus {
 .product-item .image {
   width: 354px;
   height: 330px;
-  overflow: hidden;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-item .image img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .product-item.out-of-stock .image .message {
   font-size: 24px;
   text-transform: uppercase;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  mix-blend-mode: difference;
+  /* color: white;
+  mix-blend-mode: difference; */
 }
 
 .product-item .name {

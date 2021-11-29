@@ -8,10 +8,7 @@ class Navbar extends React.Component {
     return (
       <div className="navbar">
         <img className="logo" src={logo} alt="Scandiweb" />
-        <CategoryList
-          categories={["women", "men", "kids"]}
-          selected={this.props.selected}
-        />
+        <CategoryList />
         <OptionList />
       </div>
     );

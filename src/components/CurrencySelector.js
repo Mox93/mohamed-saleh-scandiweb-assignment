@@ -1,8 +1,11 @@
 import React from "react";
 import arrow from "../assets/arrow.svg";
+import { SettingsContext } from "../context/data";
 import { getCurrencySymbol } from "../utils";
 
 class CurrencySelector extends React.Component {
+  static contextType = SettingsContext;
+
   constructor(props) {
     super(props);
 
@@ -11,23 +14,18 @@ class CurrencySelector extends React.Component {
     };
   }
 
-  handleCurrencyButton = () =>
+  toggleCurrencyMenu = () =>
     this.setState((state) => ({
       currencyMenuOpen: !state.currencyMenuOpen,
     }));
 
-  handleCurrencySelection(currency) {
-    console.log(currency);
-  }
-
   render() {
+    const settings = this.context;
+
     return (
       <div className="dropdown">
-        <button
-          className="element currency"
-          onClick={this.handleCurrencyButton}
-        >
-          {getCurrencySymbol(this.props.selected)}
+        <button className="element currency" onClick={this.toggleCurrencyMenu}>
+          {getCurrencySymbol(settings.currencies.selected)}
           <img
             className={`arrow ${this.state.currencyMenuOpen ? "open" : ""}`}
             src={arrow}
@@ -36,15 +34,16 @@ class CurrencySelector extends React.Component {
         </button>
         {this.state.currencyMenuOpen && (
           <div className="currency-menu">
-            {this.props.currencies.map((currency) => (
+            {settings.currencies.options.map((currency) => (
               <div
                 className="element"
                 key={currency}
-                onClick={() => this.handleCurrencySelection(currency)}
+                onClick={() => {
+                  settings.currencies.change(currency);
+                  this.toggleCurrencyMenu();
+                }}
               >
-                <div className="symbol">
-                  {getCurrencySymbol(this.props.selected, "")}
-                </div>
+                <div className="symbol">{getCurrencySymbol(currency, "")}</div>
                 <div className="value">{currency}</div>
               </div>
             ))}

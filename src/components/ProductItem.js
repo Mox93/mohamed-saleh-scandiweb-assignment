@@ -1,13 +1,17 @@
 import React from "react";
 import { getCurrencySymbol } from "../utils";
 import cartWhite from "../assets/cartWhite.svg";
+import { SettingsContext } from "../context/data";
 
 class ProductItem extends React.Component {
+  static contextType = SettingsContext;
+
   render() {
+    const settings = this.context;
     const product = this.props.product;
     const price = product.prices.find(
-      ({ currency }) => currency === this.props.currency
-    );
+      ({ currency }) => currency === settings.currencies.selected
+    ) || { currency: "#", amount: "-" };
 
     return (
       <div className={`product-item ${product.inStock ? "" : "out-of-stock"}`}>
