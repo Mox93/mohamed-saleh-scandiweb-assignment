@@ -1,6 +1,6 @@
 import React from "react";
 import arrow from "../assets/arrow.svg";
-import { SettingsContext } from "../context/data";
+import { SettingsContext } from "../context/settings";
 import { getCurrencySymbol } from "../utils";
 
 class CurrencySelector extends React.Component {

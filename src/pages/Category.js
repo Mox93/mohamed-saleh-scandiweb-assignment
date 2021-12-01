@@ -1,6 +1,6 @@
 import React from "react";
 import ProductItem from "../components/ProductItem";
-import { SettingsContext } from "../context/data";
+import { SettingsContext } from "../context/settings";
 import { fetchProducts } from "../utils/requests";
 
 class Category extends React.Component {
@@ -35,7 +35,7 @@ class Category extends React.Component {
     const settings = this.context;
 
     return (
-      <div className="category-page">
+      <div className="category-page container">
         <h1 className="title">{settings.categories.selected}</h1>
         <div className="grid-container">
           {this.state.products.map((product) => (

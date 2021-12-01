@@ -1,5 +1,5 @@
 import React from "react";
-import { SettingsContext } from "../context/data";
+import { SettingsContext } from "../context/settings";
 
 class CategoryList extends React.Component {
   static contextType = SettingsContext;

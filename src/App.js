@@ -6,12 +6,12 @@ import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Navbar from "./components/Navbar";
 import { fetchSettings } from "./utils/requests";
-import { settingInitialState, SettingsContext } from "./context/data";
+import { settingsInitialState, SettingsContext } from "./context/settings";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { settings: settingInitialState };
+    this.state = { settings: settingsInitialState };
 
     this.state.settings.categories.change = (selection) => {
       this.setState((state) => ({
@@ -34,9 +34,9 @@ class App extends React.Component {
 
   componentDidMount() {
     fetchSettings({
-      success: (result) => {
-        const categories = result.categories;
-        const currencies = result.currencies;
+      success: (data) => {
+        const categories = data.categories;
+        const currencies = data.currencies;
 
         this.setState((state) => ({
           settings: {
@@ -66,10 +66,10 @@ class App extends React.Component {
         <div className="App">
           <Navbar />
           <Switch>
-            <Route exact path="/categories">
+            <Route exact path="/products">
               <Category />
             </Route>
-            <Route exact path="/products">
+            <Route exact path="/products/:id">
               <Product />
             </Route>
             <Route exact path="/cart">
@@ -77,7 +77,7 @@ class App extends React.Component {
             </Route>
 
             <Route path="*">
-              {categories.length > 0 && <Redirect to={`/categories`} />}
+              {categories.length > 0 && <Redirect to={`/products`} />}
             </Route>
           </Switch>
         </div>
