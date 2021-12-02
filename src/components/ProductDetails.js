@@ -1,29 +1,20 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import DOMPurify from "dompurify";
 
 import ProductAttributes from "./ProductAttributes";
 import Price from "./Price";
-import { SettingsContext } from "../context/settings";
 
 class ProductDetails extends React.Component {
-  static contextType = SettingsContext;
-
   render() {
-    const settings = this.context;
-    const data = this.props.data;
-
-    const price = data.prices.find(
-      ({ currency }) => currency === settings.currencies.selected
-    ) || { currency: "#", amount: "-" };
-
-    console.log(data.description);
+    const params = new URLSearchParams(this.props.location.search);
 
     return (
       <div className="product-details">
-        <h2 className="title">{data.brand}</h2>
-        <h2 className="subtitle">{data.name}</h2>
+        <h2 className="title">{this.props.brand}</h2>
+        <h2 className="subtitle">{this.props.name}</h2>
         <div className="attributes">
-          {(data.attributes || []).map((attr) => (
+          {(this.props.attributes || []).map((attr) => (
             <div className="element" key={attr.id}>
               <h3 className="label">{attr.name}:</h3>
               <ProductAttributes items={attr.items} />
@@ -32,13 +23,13 @@ class ProductDetails extends React.Component {
         </div>
         <div className="product-price">
           <h3 className="label">Price:</h3>
-          <Price data={price} />
+          <Price prices={this.props.prices} currency={params.get("currency")} />
         </div>
         <button className="call-to-action">Add to cart</button>
         <div
           className="description"
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(data.description),
+            __html: DOMPurify.sanitize(this.props.description),
           }}
         />
       </div>
@@ -46,4 +37,4 @@ class ProductDetails extends React.Component {
   }
 }
 
-export default ProductDetails;
+export default withRouter(ProductDetails);

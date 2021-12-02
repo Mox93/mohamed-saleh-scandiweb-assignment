@@ -3,10 +3,13 @@ import { getCurrencySymbol } from "../utils";
 
 class Price extends React.Component {
   render() {
-    const data = this.props.data;
+    const price = this.props.prices.find(
+      ({ currency }) => currency === this.props.currency
+    );
+
     return (
-      <h3 className="price">{`${getCurrencySymbol(data.currency)} ${
-        data.amount
+      <h3 className="price">{`${getCurrencySymbol(price.currency)} ${
+        price.amount
       }`}</h3>
     );
   }

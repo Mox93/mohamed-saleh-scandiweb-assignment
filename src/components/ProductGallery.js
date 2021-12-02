@@ -6,8 +6,8 @@ class ProductGallery extends React.Component {
     this.state = { selected: null };
   }
 
-  componentDidUpdate() {
-    if (this.props.gallery.length > 0 && !this.state.selected)
+  componentDidMount() {
+    if (!this.state.selected && this.props.gallery.length > 0)
       this.setState(() => ({ selected: this.props.gallery[0] }));
   }
 
@@ -21,19 +21,15 @@ class ProductGallery extends React.Component {
                 this.state.selected === image ? "selected" : ""
               }`}
               key={index}
-              // style={{ backgroundImage: `url(${image}` }}
               src={image}
               alt=""
               onClick={() => this.setState(() => ({ selected: image }))}
             />
           ))}
         </div>
-        <img
-          className="preview image"
-          // style={{ backgroundImage: `url(${this.state.selected}` }}
-          src={this.state.selected}
-          alt="preview"
-        />
+        <div className="preview">
+          <img src={this.state.selected} alt="preview" />
+        </div>
       </div>
     );
   }

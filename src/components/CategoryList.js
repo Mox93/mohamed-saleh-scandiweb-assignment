@@ -1,25 +1,26 @@
 import React from "react";
-import { SettingsContext } from "../context/settings";
+import { Link } from "react-router-dom";
 
 class CategoryList extends React.Component {
-  static contextType = SettingsContext;
-
   render() {
-    const settings = this.context;
+    const params = new URLSearchParams(this.props.params);
+    const selected = params.get("category");
 
     return (
       <div className="category-list">
-        {settings.categories.options.map((category) => (
-          <button
-            className={`element ${
-              settings.categories.selected === category ? "selected" : ""
-            }`}
-            key={category}
-            onClick={() => settings.categories.change(category)}
-          >
-            {category}
-          </button>
-        ))}
+        {this.props.categories.map((category) => {
+          params.set("category", category);
+
+          return (
+            <Link
+              className={`element ${selected === category ? "selected" : ""}`}
+              key={category}
+              to={`/products?${params.toString()}`}
+            >
+              {category}
+            </Link>
+          );
+        })}
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+
 import ProductDetails from "../components/ProductDetails";
 import ProductGallery from "../components/ProductGallery";
 import { fetchProduct } from "../utils/requests";
@@ -7,16 +8,14 @@ import { fetchProduct } from "../utils/requests";
 class Product extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: null };
+    this.state = {};
   }
 
   componentDidMount() {
-    console.log(this.props.match);
-
     fetchProduct(this.props.match.params.id, {
       success: (data) => {
         console.log(data);
-        this.setState({ data });
+        this.setState(data);
       },
       error: (err) => {
         console.log(err);
@@ -27,10 +26,8 @@ class Product extends React.Component {
   render() {
     return (
       <div className="product-page container">
-        {this.state.data && (
-          <ProductGallery gallery={this.state.data.gallery} />
-        )}
-        {this.state.data && <ProductDetails data={this.state.data} />}
+        {this.state.gallery && <ProductGallery gallery={this.state.gallery} />}
+        {this.state.name && <ProductDetails {...this.state} />}
       </div>
     );
   }

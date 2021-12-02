@@ -1,28 +1,26 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
+
 import ProductItem from "../components/ProductItem";
-import { SettingsContext } from "../context/settings";
 import { fetchProducts } from "../utils/requests";
 
 class Category extends React.Component {
-  static contextType = SettingsContext;
-
   constructor(props) {
     super(props);
     this.state = { category: null, products: [] };
   }
 
-  componentDidMount() {
-    const settings = this.context;
+  fetchProducts() {
+    const params = new URLSearchParams(this.props.location.search);
+    const category = params.get("category");
 
-    this.setState(() => ({ category: settings.categories.selected }));
-  }
+    if (this.state.category !== category) {
+      // console.log(
+      //   `Fetching Product (was: ${this.state.category}, will-be: ${category})`
+      // );
+      this.setState({ category });
 
-  componentDidUpdate() {
-    const settings = this.context;
-
-    if (settings.categories.selected !== this.state.category) {
-      this.setState(() => ({ category: settings.categories.selected }));
-      fetchProducts(settings.categories.selected, {
+      fetchProducts(category, {
         success: (products) => {
           this.setState(() => ({ products }));
         },
@@ -31,15 +29,26 @@ class Category extends React.Component {
     }
   }
 
-  render() {
-    const settings = this.context;
+  componentDidMount() {
+    this.fetchProducts();
+  }
 
+  componentDidUpdate() {
+    console.log("CategoryDidUpdate");
+    this.fetchProducts();
+  }
+
+  render() {
     return (
       <div className="category-page container">
-        <h1 className="title">{settings.categories.selected}</h1>
+        <h1 className="title">{this.state.category}</h1>
         <div className="grid-container">
           {this.state.products.map((product) => (
-            <ProductItem key={product.id} product={product} />
+            <ProductItem
+              key={product.id}
+              {...product}
+              params={this.props.location.search}
+            />
           ))}
         </div>
       </div>
@@ -47,4 +56,4 @@ class Category extends React.Component {
   }
 }
 
-export default Category;
+export default withRouter(Category);

@@ -1,41 +1,37 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 import cartWhite from "../assets/cartWhite.svg";
-import { SettingsContext } from "../context/settings";
 import Price from "./Price";
 
 class ProductItem extends React.Component {
-  static contextType = SettingsContext;
-
   render() {
-    const settings = this.context;
-    const product = this.props.product;
-    const price = product.prices.find(
-      ({ currency }) => currency === settings.currencies.selected
-    ) || { currency: "#", amount: "-" };
+    const params = new URLSearchParams(this.props.params);
 
     return (
       <Link
-        className={`product-item ${product.inStock ? "" : "out-of-stock"}`}
-        to={`/products/${product.id}`}
+        className={`product-item ${this.props.inStock ? "" : "out-of-stock"}`}
+        to={`/products/${this.props.id}${this.props.params}`}
       >
         <div
           className="image"
-          style={{ backgroundImage: `url(${product.gallery[0]})` }}
+          style={{ backgroundImage: `url(${this.props.gallery[0]})` }}
         >
-          {product.inStock ? null : <h3 className="message">out of stock</h3>}
+          {this.props.inStock ? null : (
+            <h3 className="message">out of stock</h3>
+          )}
         </div>
         <button
           className="cart-icon"
           onClick={(e) => {
             e.preventDefault();
-            console.log(product);
+            console.log(this.props);
           }}
         >
           <img src={cartWhite} alt="cart" />
         </button>
-        <h3 className="name">{product.name}</h3>
-        <Price data={price} />
+        <h3 className="name">{this.props.name}</h3>
+        <Price prices={this.props.prices} currency={params.get("currency")} />
       </Link>
     );
   }
