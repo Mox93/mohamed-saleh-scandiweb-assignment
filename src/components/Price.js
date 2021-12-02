@@ -4,13 +4,14 @@ import { getCurrencySymbol } from "../utils";
 class Price extends React.Component {
   render() {
     const price = this.props.prices.find(
-      ({ currency }) => currency === this.props.currency
+      ({ currency }) =>
+        currency.toLowerCase() === this.props.currency.toLowerCase()
     );
 
     return (
-      <h3 className="price">{`${getCurrencySymbol(price.currency)} ${
-        price.amount
-      }`}</h3>
+      <h3 className="price">{`${getCurrencySymbol(
+        price.currency.toLowerCase()
+      )} ${price.amount}`}</h3>
     );
   }
 }

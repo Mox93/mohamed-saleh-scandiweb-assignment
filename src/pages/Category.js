@@ -34,7 +34,6 @@ class Category extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("CategoryDidUpdate");
     this.fetchProducts();
   }
 

@@ -2,15 +2,15 @@ import React from "react";
 
 class ProductAttributes extends React.Component {
   render() {
-    const items = this.props.items;
-
     return (
       <div className="options">
-        {items.map((item) => (
+        {this.props.items.map((item) => (
           <button
-            className="element"
+            className={`element ${
+              this.props.selected === item.id ? "selected" : ""
+            }`}
             key={item.id}
-            onClick={() => console.log(item.value)}
+            onClick={() => this.props.changeSelection(item.id)}
           >
             {item.displayValue}
           </button>

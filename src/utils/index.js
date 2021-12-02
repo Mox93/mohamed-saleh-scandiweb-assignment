@@ -1,9 +1,9 @@
 const SYMBOLS = {
-  USD: "$",
-  GBP: "£",
-  AUD: "$",
-  JPY: "¥",
-  RUB: "₽",
+  usd: "$",
+  gbp: "£",
+  aud: "$",
+  jpy: "¥",
+  rub: "₽",
 };
 
 export const getCurrencySymbol = (currency, alt) =>

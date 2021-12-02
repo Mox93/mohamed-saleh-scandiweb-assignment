@@ -19,19 +19,30 @@ class Navbar extends React.Component {
 
   validateParams({ categories, currencies }) {
     const params = this.getParams();
-    let violation = false;
+    const currencyParam = params.get("currency") || "";
+    const categoryParam = params.get("category") || "";
 
-    if (!currencies.includes(params.get("currency"))) {
-      params.set("currency", currencies[0]);
-      violation = true;
+    const currency =
+      currencies.find((currency) => currency === currencyParam.toLowerCase()) ||
+      currencies[0];
+    const category =
+      categories.find((category) => category === categoryParam.toLowerCase()) ||
+      categories[0];
+
+    let replace = false;
+
+    if (currency !== currencyParam) {
+      params.set("currency", currency);
+      replace = true;
     }
 
-    if (!categories.includes(params.get("category"))) {
-      params.set("category", categories[0]);
-      violation = true;
+    if (category !== categoryParam) {
+      params.set("category", category);
+      replace = true;
     }
 
-    if (violation) {
+    if (replace) {
+      console.log("Replacing");
       this.props.history.replace({ search: params.toString() });
     }
   }
@@ -39,20 +50,22 @@ class Navbar extends React.Component {
   componentDidMount() {
     fetchSettings({
       success: (data) => {
-        const categories = data.categories.map(({ name }) => name);
-        this.setState(() => ({
-          categories: categories,
-          currencies: data.currencies,
-        }));
-        this.validateParams({ categories, currencies: data.currencies });
+        const categories = data.categories.map(({ name }) =>
+          name.toLowerCase()
+        );
+        const currencies = data.currencies.map((currency) =>
+          currency.toLowerCase()
+        );
+        this.setState(() => ({ categories, currencies }));
+        this.validateParams({ categories, currencies });
       },
       error: (err) => console.log(err),
     });
   }
 
-  // componentDidUpdate() {
-  //   this.validateParams(this.state);
-  // }
+  componentDidUpdate() {
+    this.validateParams(this.state);
+  }
 
   render() {
     const params = this.getParams().toString();

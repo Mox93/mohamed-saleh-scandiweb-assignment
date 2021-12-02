@@ -12,10 +12,24 @@ class Product extends React.Component {
   }
 
   componentDidMount() {
+    const params = new URLSearchParams(this.props.location.search);
+
     fetchProduct(this.props.match.params.id, {
       success: (data) => {
-        console.log(data);
-        this.setState(data);
+        if (!data) {
+          this.props.history.replace({
+            pathname: "/products",
+            search: this.props.location.search,
+          });
+        } else {
+          this.setState(data);
+
+          if (data.category !== params.get("category")) {
+            console.log("NEED TO FIX");
+            params.set("category", data.category);
+            this.props.history.replace({ search: params.toString() });
+          }
+        }
       },
       error: (err) => {
         console.log(err);
