@@ -41,6 +41,7 @@ class ProductDetails extends React.Component {
               <h3 className="label">{attribute.name}:</h3>
               <ProductAttributes
                 name={`attr${index}`}
+                type={attribute.type}
                 items={attribute.items}
                 selected={this.state.selectedAttributes[attribute.id]}
                 changeSelection={(selection) =>
@@ -50,7 +51,7 @@ class ProductDetails extends React.Component {
                     return { selectedAttributes };
                   })
                 }
-                // (state) => ({attributes: {...state.attributes, `${attr.id}`: selection}})
+                disabled={!this.props.inStock}
               />
             </div>
           ))}

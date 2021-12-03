@@ -9,6 +9,7 @@
 }
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: "Raleway", sans-serif;
@@ -55,7 +56,6 @@ img.image {
 /* NAVBAR */
 
 .navbar {
-  box-sizing: border-box;
   height: 80px;
   padding: 0 100px;
   background-color: var(--c-white);
@@ -371,6 +371,19 @@ img.image {
   max-height: 400px;
 }
 
+.product-details .description p {
+  margin-bottom: 16px;
+}
+
+.product-details .description h1,
+.product-details .description h2,
+.product-details .description h3,
+.product-details .description h4,
+.product-details .description h5,
+.product-details .description h6 {
+  margin-bottom: 8px;
+}
+
 /* ATTRIBUTES */
 
 .attributes {
@@ -391,9 +404,25 @@ img.image {
   cursor: pointer;
 }
 
+.attributes .options > .element:disabled {
+  opacity: 50%;
+  cursor: default;
+}
+
 .attributes .options > .element.selected {
   background-color: var(--c-text);
   color: var(--c-white);
+}
+
+.attributes .options > .element.swatch {
+  padding: 3px;
+  border: 1px solid #1d1f2255;
+}
+
+.attributes .options > .element.swatch.selected {
+  padding: 2px;
+  border: 2px solid #1d1f22;
+  background-color: var(--c-white);
 }
 
 /* PRODUCT PRICE */
