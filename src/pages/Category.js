@@ -3,22 +3,27 @@ import { withRouter } from "react-router-dom";
 
 import ProductItem from "../components/ProductItem";
 import { fetchProducts } from "../utils/requests";
+import { SettingsContext } from "../context/settings";
 
 class Category extends React.Component {
+  static contextType = SettingsContext;
+
   constructor(props) {
     super(props);
-    this.state = { category: null, products: [] };
+    this.state = { category: "", products: [] };
   }
 
-  fetchProducts() {
+  handleProducts() {
+    const settings = this.context;
     const params = new URLSearchParams(this.props.location.search);
-    const category = params.get("category");
+    const category = params.get("category") || settings.category;
 
     if (this.state.category !== category) {
       // console.log(
       //   `Fetching Product (was: ${this.state.category}, will-be: ${category})`
       // );
       this.setState({ category });
+      settings.setCategory(category, true);
 
       fetchProducts(category, {
         success: (products) => {
@@ -30,14 +35,16 @@ class Category extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchProducts();
+    this.handleProducts();
   }
 
   componentDidUpdate() {
-    this.fetchProducts();
+    this.handleProducts();
   }
 
   render() {
+    const settings = this.context;
+
     return (
       <div className="category-page container">
         <h1 className="title">{this.state.category}</h1>
@@ -46,7 +53,8 @@ class Category extends React.Component {
             <ProductItem
               key={product.id}
               {...product}
-              params={this.props.location.search}
+              params={settings.getParams((params) => params.delete("category"))}
+              currency={settings.currency}
             />
           ))}
         </div>

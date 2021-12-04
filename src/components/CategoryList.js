@@ -3,19 +3,18 @@ import { Link } from "react-router-dom";
 
 class CategoryList extends React.Component {
   render() {
-    const params = new URLSearchParams(this.props.params);
-    const selected = params.get("category");
-
     return (
       <div className="category-list">
         {this.props.categories.map((category) => {
-          params.set("category", category);
-
           return (
             <Link
-              className={`element ${selected === category ? "selected" : ""}`}
+              className={`element ${
+                this.props.selected === category ? "selected" : ""
+              }`}
               key={category}
-              to={`/products?${params.toString()}`}
+              to={`/products?${this.props.getParams((params) =>
+                params.set("category", category)
+              )}`}
             >
               {category}
             </Link>

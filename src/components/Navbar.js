@@ -1,53 +1,23 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
 
 import CategoryList from "./CategoryList";
 import CurrencySelector from "./CurrencySelector";
 import logo from "../assets/logo.svg";
 import { fetchSettings } from "../utils/requests";
 import CartOverlay from "./CartOverlay";
+import { SettingsContext } from "../context/settings";
 
 class Navbar extends React.Component {
+  static contextType = SettingsContext;
+
   constructor(props) {
     super(props);
     this.state = { categories: [], currencies: [] };
   }
 
-  getParams() {
-    return new URLSearchParams(this.props.location.search);
-  }
-
-  validateParams({ categories, currencies }) {
-    const params = this.getParams();
-    const currencyParam = params.get("currency") || "";
-    const categoryParam = params.get("category") || "";
-
-    const currency =
-      currencies.find((currency) => currency === currencyParam.toLowerCase()) ||
-      currencies[0];
-    const category =
-      categories.find((category) => category === categoryParam.toLowerCase()) ||
-      categories[0];
-
-    let replace = false;
-
-    if (currency !== currencyParam) {
-      params.set("currency", currency);
-      replace = true;
-    }
-
-    if (category !== categoryParam) {
-      params.set("category", category);
-      replace = true;
-    }
-
-    if (replace) {
-      console.log("Replacing");
-      this.props.history.replace({ search: params.toString() });
-    }
-  }
-
   componentDidMount() {
+    const settings = this.context;
+
     fetchSettings({
       success: (data) => {
         const categories = data.categories.map(({ name }) =>
@@ -57,27 +27,28 @@ class Navbar extends React.Component {
           currency.toLowerCase()
         );
         this.setState(() => ({ categories, currencies }));
-        this.validateParams({ categories, currencies });
+        settings.validate({ categories, currencies });
       },
       error: (err) => console.log(err),
     });
   }
 
-  componentDidUpdate() {
-    this.validateParams(this.state);
-  }
-
   render() {
-    const params = this.getParams().toString();
+    const settings = this.context;
 
     return (
       <div className="navbar">
         <img className="logo" src={logo} alt="Scandiweb" />
-        <CategoryList categories={this.state.categories} params={params} />
+        <CategoryList
+          categories={this.state.categories}
+          selected={settings.category}
+          getParams={settings.getParams}
+        />
         <div className="option-list">
           <CurrencySelector
             currencies={this.state.currencies}
-            params={params}
+            selected={settings.currency}
+            setCurrency={settings.setCurrency}
           />
           <CartOverlay />
         </div>
@@ -86,4 +57,4 @@ class Navbar extends React.Component {
   }
 }
 
-export default withRouter(Navbar);
+export default Navbar;

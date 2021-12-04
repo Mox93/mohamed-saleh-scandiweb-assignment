@@ -3,16 +3,19 @@ import { withRouter } from "react-router-dom";
 
 import ProductDetails from "../components/ProductDetails";
 import ProductGallery from "../components/ProductGallery";
+import { SettingsContext } from "../context/settings";
 import { fetchProduct } from "../utils/requests";
 
 class Product extends React.Component {
+  static contextType = SettingsContext;
+
   constructor(props) {
     super(props);
     this.state = {};
   }
 
   componentDidMount() {
-    const params = new URLSearchParams(this.props.location.search);
+    const settings = this.context;
 
     fetchProduct(this.props.match.params.id, {
       success: (data) => {
@@ -24,10 +27,8 @@ class Product extends React.Component {
         } else {
           this.setState(data);
 
-          if (data.category !== params.get("category")) {
-            console.log("NEED TO FIX");
-            params.set("category", data.category);
-            this.props.history.replace({ search: params.toString() });
+          if (data.category !== settings.category) {
+            settings.setCategory(data.category);
           }
         }
       },

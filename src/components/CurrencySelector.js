@@ -1,5 +1,4 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
 
 import arrow from "../assets/arrow.svg";
 import { getCurrencySymbol } from "../utils";
@@ -17,13 +16,10 @@ class CurrencySelector extends React.Component {
     }));
 
   render() {
-    const params = new URLSearchParams(this.props.params);
-    const selected = params.get("currency");
-
     return (
       <div className="dropdown">
         <button className="element currency" onClick={this.toggleCurrencyMenu}>
-          {getCurrencySymbol(selected)}
+          {getCurrencySymbol(this.props.selected)}
           <img
             className={`arrow ${this.state.currencyMenuOpen ? "open" : ""}`}
             src={arrow}
@@ -37,8 +33,7 @@ class CurrencySelector extends React.Component {
                 className="element"
                 key={currency}
                 onClick={() => {
-                  params.set("currency", currency);
-                  this.props.history.replace({ search: params.toString() });
+                  this.props.setCurrency(currency);
                   this.toggleCurrencyMenu();
                 }}
               >
@@ -53,4 +48,4 @@ class CurrencySelector extends React.Component {
   }
 }
 
-export default withRouter(CurrencySelector);
+export default CurrencySelector;

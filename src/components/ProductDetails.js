@@ -1,11 +1,13 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
 import DOMPurify from "dompurify";
 
 import ProductAttributes from "./ProductAttributes";
 import Price from "./Price";
+import { SettingsContext } from "../context/settings";
 
 class ProductDetails extends React.Component {
+  static contextType = SettingsContext;
+
   constructor(props) {
     super(props);
 
@@ -29,7 +31,7 @@ class ProductDetails extends React.Component {
   }
 
   render() {
-    const params = new URLSearchParams(this.props.location.search);
+    const settings = this.context;
 
     return (
       <div className="product-details">
@@ -58,7 +60,7 @@ class ProductDetails extends React.Component {
         </div>
         <div className="product-price">
           <h3 className="label">Price:</h3>
-          <Price prices={this.props.prices} currency={params.get("currency")} />
+          <Price prices={this.props.prices} currency={settings.currency} />
         </div>
         <button
           className="call-to-action"
@@ -77,4 +79,4 @@ class ProductDetails extends React.Component {
   }
 }
 
-export default withRouter(ProductDetails);
+export default ProductDetails;
