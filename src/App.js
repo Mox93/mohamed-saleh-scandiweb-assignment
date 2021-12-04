@@ -14,8 +14,6 @@ class App extends React.Component {
     this.state = { settings: settingsInitialState };
 
     this.state.settings.setCategory = (category, updateParams = false) => {
-      console.log("Setting Category", category, updateParams);
-
       const params = new URLSearchParams(this.props.location.search);
 
       if (this.state.settings.category !== category) {
@@ -36,8 +34,6 @@ class App extends React.Component {
     };
 
     this.state.settings.setCurrency = (currency) => {
-      console.log("Setting Currency", currency);
-
       window.localStorage.setItem("currency", currency);
       this.setState((state) => ({ settings: { ...state.settings, currency } }));
     };
@@ -52,8 +48,6 @@ class App extends React.Component {
       this.state.settings.setCurrency(currency);
 
       // CATEGORIES
-      console.log("location from inside validate", this.props.location);
-
       const params = this.getParams();
 
       const categoryParam = params.get("category") || "";
@@ -83,7 +77,7 @@ class App extends React.Component {
     this.setState((state) => ({
       settings: {
         ...state.settings,
-        currency: window.localStorage.getItem("currency").toLowerCase(),
+        currency: (window.localStorage.getItem("currency") || "").toLowerCase(),
       },
     }));
   }

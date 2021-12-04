@@ -332,7 +332,7 @@ img.image {
 }
 
 .product-details .subtitle {
-  margin-bottom: 42px;
+  margin-bottom: 40px;
 }
 
 .product-details .label {
@@ -375,13 +375,8 @@ img.image {
   margin-bottom: 16px;
 }
 
-.product-details .description h1,
-.product-details .description h2,
-.product-details .description h3,
-.product-details .description h4,
-.product-details .description h5,
-.product-details .description h6 {
-  margin-bottom: 8px;
+.product-details .description * + * {
+  margin-top: 8px;
 }
 
 /* ATTRIBUTES */
@@ -390,8 +385,8 @@ img.image {
   margin-bottom: 40px;
 }
 
-.attributes > .element {
-  margin-bottom: 20px;
+.attributes > .element + .element {
+  margin-top: 20px;
 }
 
 .attributes .options > .element {
