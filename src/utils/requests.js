@@ -48,6 +48,7 @@ export function fetchProduct(id, { success, error }) {
   const product = new Query("product")
     .addArgument("id", "String!", id)
     .addFieldList([
+      "id",
       "name",
       "gallery",
       "inStock",

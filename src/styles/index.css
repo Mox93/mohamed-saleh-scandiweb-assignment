@@ -128,6 +128,20 @@ img.image {
   transform: rotate(180deg);
 }
 
+.option-list .badge {
+  padding: 1px 5px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: var(--c-text);
+  position: absolute;
+  top: calc(50% - 20px);
+  left: calc(100% - 20px);
+  color: var(--c-white);
+  font-size: 14px;
+  font-weight: 700;
+}
+
 /* CURRENCY MENU */
 
 .currency-menu {
@@ -157,6 +171,38 @@ img.image {
 .currency-menu .element .value {
   flex: 3;
   text-transform: uppercase;
+}
+
+/* CART MENU */
+.cart-menu {
+  min-width: 256px;
+  padding: 8px 16px 20px;
+  top: 80px;
+  right: -20px;
+  background-color: var(--c-white);
+  position: absolute;
+}
+
+.cart-menu::before {
+  content: "";
+  width: 100vw;
+  height: calc(100vh - 80px);
+  background-color: #1d1f2255;
+  top: 0;
+  right: -80px;
+  position: absolute;
+  z-index: -1;
+}
+
+.cart-menu .message {
+  text-align: center;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.cart-menu .title {
+  font-weight: 700;
+  font-size: 16px;
 }
 
 /* CATEGORY PAGE */

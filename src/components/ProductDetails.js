@@ -3,10 +3,10 @@ import DOMPurify from "dompurify";
 
 import ProductAttributes from "./ProductAttributes";
 import Price from "./Price";
-import { SettingsContext } from "../context/settings";
+import { CartContext } from "../context/cart";
 
 class ProductDetails extends React.Component {
-  static contextType = SettingsContext;
+  static contextType = CartContext;
 
   constructor(props) {
     super(props);
@@ -31,7 +31,7 @@ class ProductDetails extends React.Component {
   }
 
   render() {
-    const settings = this.context;
+    const cart = this.context;
 
     return (
       <div className="product-details">
@@ -60,11 +60,21 @@ class ProductDetails extends React.Component {
         </div>
         <div className="product-price">
           <h3 className="label">Price:</h3>
-          <Price prices={this.props.prices} currency={settings.currency} />
+          <Price prices={this.props.prices} currency={this.props.currency} />
         </div>
         <button
           className="call-to-action"
           disabled={!(this.allAttributesSelected() && this.props.inStock)}
+          onClick={() =>
+            cart.add({
+              id: this.props.id,
+              brand: this.props.brand,
+              name: this.props.name,
+              prices: this.props.prices,
+              amount: 1,
+              selections: this.state.selectedAttributes,
+            })
+          }
         >
           Add to cart
         </button>

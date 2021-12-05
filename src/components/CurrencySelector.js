@@ -7,26 +7,26 @@ class CurrencySelector extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { currencyMenuOpen: false };
+    this.state = { menuOpen: false };
   }
 
-  toggleCurrencyMenu = () =>
+  toggleMenu = () =>
     this.setState((state) => ({
-      currencyMenuOpen: !state.currencyMenuOpen,
+      menuOpen: !state.menuOpen,
     }));
 
   render() {
     return (
       <div className="dropdown">
-        <button className="element currency" onClick={this.toggleCurrencyMenu}>
+        <button className="element currency" onClick={this.toggleMenu}>
           {getCurrencySymbol(this.props.selected)}
           <img
-            className={`arrow ${this.state.currencyMenuOpen ? "open" : ""}`}
+            className={`arrow ${this.state.menuOpen ? "open" : ""}`}
             src={arrow}
             alt=""
           />
         </button>
-        {this.state.currencyMenuOpen && (
+        {this.state.menuOpen && (
           <div className="currency-menu">
             {this.props.currencies.map((currency) => (
               <button
@@ -34,7 +34,7 @@ class CurrencySelector extends React.Component {
                 key={currency}
                 onClick={() => {
                   this.props.setCurrency(currency);
-                  this.toggleCurrencyMenu();
+                  this.toggleMenu();
                 }}
               >
                 <div className="symbol">{getCurrencySymbol(currency, "")}</div>

@@ -39,10 +39,14 @@ class Product extends React.Component {
   }
 
   render() {
+    const settings = this.context;
+
     return (
       <div className="product-page container">
         {this.state.gallery && <ProductGallery gallery={this.state.gallery} />}
-        {this.state.name && <ProductDetails {...this.state} />}
+        {this.state.name && (
+          <ProductDetails {...this.state} currency={settings.currency} />
+        )}
       </div>
     );
   }

@@ -50,7 +50,7 @@ class Navbar extends React.Component {
             selected={settings.currency}
             setCurrency={settings.setCurrency}
           />
-          <CartOverlay />
+          <CartOverlay currency={settings.currency} />
         </div>
       </div>
     );
