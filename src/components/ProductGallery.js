@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "./Image";
 
 class ProductGallery extends React.Component {
   constructor(props) {
@@ -16,19 +17,18 @@ class ProductGallery extends React.Component {
       <div className="product-gallery">
         <div className="thumbnails">
           {this.props.gallery.map((image, index) => (
-            <img
+            <Image
               className={`image ${
                 this.state.selected === image ? "selected" : ""
               }`}
               key={index}
               src={image}
-              alt=""
               onClick={() => this.setState(() => ({ selected: image }))}
             />
           ))}
         </div>
         <div className="preview">
-          <img src={this.state.selected} alt="preview" />
+          <Image src={this.state.selected} alt="preview" />
         </div>
       </div>
     );

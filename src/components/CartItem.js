@@ -1,5 +1,6 @@
 import React from "react";
 import Price from "./Price";
+import Image from "./Image";
 
 class CartItem extends React.Component {
   render() {
@@ -45,7 +46,7 @@ class CartItem extends React.Component {
           </button>
         </div>
         <div className="image">
-          <img src={this.props.image} alt="" />
+          <Image src={this.props.image} alt="" />
         </div>
       </div>
     );
