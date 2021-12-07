@@ -14,11 +14,10 @@ export function initializeCart(app) {
   return {
     ...cartInitialState,
 
+    ...fetchCart(),
+
     add: (newItem) => {
       const idCounter = { ...app.state.cart.idCounter };
-      const count = (idCounter[newItem.id] || 0) + 1;
-      newItem.identifier = `${newItem.id} ${count}`;
-      idCounter[newItem.id] = count;
 
       let found = false;
 
@@ -34,22 +33,30 @@ export function initializeCart(app) {
       });
 
       if (!found) {
+        const count = idCounter[newItem.id] || 0;
+        newItem.uid = `${newItem.id} ${count}`;
+        idCounter[newItem.id] = count + 1;
+
         items.push(newItem);
       }
 
-      app.setState((state) => ({
-        cart: {
+      app.setState((state) => {
+        const cart = {
           ...state.cart,
           items,
           idCounter,
-        },
-      }));
+        };
+
+        window.localStorage.setItem("cart", JSON.stringify(cart));
+
+        return { cart };
+      });
     },
 
-    updateAmount: (identifier, amount) => {
+    updateAmount: (uid, amount) => {
       const items = app.state.cart.items
         .map((item) => {
-          if (item.identifier === identifier) {
+          if (item.uid === uid) {
             return { ...item, amount };
           }
           return item;
@@ -88,4 +95,13 @@ function sameSelections(attributes1, attributes2) {
   }
 
   return true;
+}
+
+function fetchCart() {
+  try {
+    return JSON.parse(window.localStorage.getItem("cart"));
+  } catch (e) {
+    console.log(e);
+    return {};
+  }
 }

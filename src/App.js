@@ -23,12 +23,12 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.setState((state) => ({
-      settings: {
-        ...state.settings,
-        currency: (window.localStorage.getItem("currency") || "").toLowerCase(),
-      },
-    }));
+    // this.setState((state) => ({
+    //   settings: {
+    //     ...state.settings,
+    //     currency: (window.localStorage.getItem("currency") || "").toLowerCase(),
+    //   },
+    // }));
   }
 
   render() {

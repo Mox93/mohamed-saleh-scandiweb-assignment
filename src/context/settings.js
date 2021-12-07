@@ -15,6 +15,8 @@ export function initializeSettings(app) {
   return {
     ...settingsInitialState,
 
+    currency: fetchCurrency(),
+
     setCategory: (category, updateParams = false) => {
       const params = new URLSearchParams(app.props.location.search);
 
@@ -70,4 +72,13 @@ export function initializeSettings(app) {
       return params.toString();
     },
   };
+}
+
+function fetchCurrency() {
+  try {
+    return window.localStorage.getItem("currency").toLowerCase();
+  } catch (e) {
+    console.log("");
+    return "";
+  }
 }

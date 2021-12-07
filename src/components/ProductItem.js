@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import Price from "./Price";
+import Image from "./Image";
 import cartWhite from "../assets/cartWhite.svg";
 import { CartContext } from "../context/cart";
 
@@ -16,13 +17,8 @@ class ProductItem extends React.Component {
         className={`product-item ${this.props.inStock ? "" : "out-of-stock"}`}
         to={`/products/${this.props.id}?${this.props.params}`}
       >
-        <div
-          className="image"
-          style={{ backgroundImage: `url(${this.props.gallery[0]})` }}
-        >
-          {this.props.inStock ? null : (
-            <h3 className="message">out of stock</h3>
-          )}
+        <div className="image">
+          <Image src={this.props.gallery[0]} />
         </div>
         <button
           className="cart-icon"

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import cartIcon from "../assets/cart.svg";
 import { CartContext } from "../context/cart";
@@ -35,31 +36,51 @@ class CartOverlay extends React.Component {
         {this.state.menuOpen && (
           <div className="cart-menu">
             {cart.items.length > 0 ? (
-              <div className="content">
-                <h3 className="title">
-                  My Bag,
-                  <span>
-                    {` ${cart.items.length} item${
-                      cart.items.length > 1 ? "s" : ""
-                    }`}
-                  </span>
-                </h3>
-                {cart.items.map((item) => (
-                  <CartItem
-                    {...item}
-                    key={item.identifier}
-                    currency={this.props.currency}
-                    updateAmount={cart.updateAmount}
-                  />
-                ))}
-                <div className="total-price">
-                  <h3 className="label">total</h3>
-                  <Price
-                    prices={cart.totalPrices()}
-                    currency={this.props.currency}
-                  />
+              <>
+                <div className="content">
+                  <h3 className="title">
+                    My Bag,
+                    <span>
+                      {` ${cart.items.length} item${
+                        cart.items.length > 1 ? "s" : ""
+                      }`}
+                    </span>
+                  </h3>
+                  {cart.items.map((item) => (
+                    <CartItem
+                      {...item}
+                      key={item.uid}
+                      currency={this.props.currency}
+                      updateAmount={cart.updateAmount}
+                    />
+                  ))}
                 </div>
-              </div>
+                <div className="summery">
+                  <div className="total-price">
+                    <h3 className="label">total</h3>
+                    <Price
+                      prices={cart.totalPrices()}
+                      currency={this.props.currency}
+                    />
+                  </div>
+                  <div className="actions">
+                    <Link
+                      className="view-bag"
+                      to={`/cart?${this.props.params}`}
+                    >
+                      view bag
+                    </Link>
+                    <button
+                      className="check-out"
+                      onClick={() =>
+                        alert("WE'VE TAKEN ALL YOUR MONEY MWAHAHAHAHA!!!")
+                      }
+                    >
+                      check out
+                    </button>
+                  </div>
+                </div>
+              </>
             ) : (
               <h3 className="message">No items</h3>
             )}

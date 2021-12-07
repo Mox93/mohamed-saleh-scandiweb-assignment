@@ -50,7 +50,10 @@ class Navbar extends React.Component {
             selected={settings.currency}
             setCurrency={settings.setCurrency}
           />
-          <CartOverlay currency={settings.currency} />
+          <CartOverlay
+            currency={settings.currency}
+            params={settings.getParams((params) => params.delete("category"))}
+          />
         </div>
       </div>
     );

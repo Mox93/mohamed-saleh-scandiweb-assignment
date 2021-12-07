@@ -1,6 +1,6 @@
 import React from "react";
 import Price from "./Price";
-import Image from "./Image";
+import ImageNotFound from "../assets/image-not-found.svg";
 
 class CartItem extends React.Component {
   render() {
@@ -15,7 +15,11 @@ class CartItem extends React.Component {
               const attribute = this.props.attributes[key];
 
               return (
-                <div className={`element ${attribute.type}`} key={key}>
+                <div
+                  className={`element ${attribute.type}`}
+                  key={key}
+                  data-name-tip={attribute.name}
+                >
                   {attribute.type === "swatch" ? (
                     <div
                       style={{ backgroundColor: attribute.selected.value }}
@@ -32,10 +36,7 @@ class CartItem extends React.Component {
           <button
             className="element"
             onClick={() =>
-              this.props.updateAmount(
-                this.props.identifier,
-                this.props.amount + 1
-              )
+              this.props.updateAmount(this.props.uid, this.props.amount + 1)
             }
           >
             +
@@ -44,18 +45,18 @@ class CartItem extends React.Component {
           <button
             className="element"
             onClick={() =>
-              this.props.updateAmount(
-                this.props.identifier,
-                this.props.amount - 1
-              )
+              this.props.updateAmount(this.props.uid, this.props.amount - 1)
             }
           >
             -
           </button>
         </div>
-        <div className="image">
-          <Image src={this.props.gallery[0]} />
-        </div>
+        <div
+          className="image"
+          style={{
+            backgroundImage: `url(${this.props.gallery[0]}), url(${ImageNotFound})`,
+          }}
+        />
       </div>
     );
   }
