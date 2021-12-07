@@ -64,9 +64,9 @@ export function initializeSettings(app) {
       }
     },
 
-    getParams: (applyChanges = () => {}) => {
+    getParams: (update = () => {}) => {
       const params = app.getParams();
-      applyChanges(params);
+      update(params);
       return params.toString();
     },
   };

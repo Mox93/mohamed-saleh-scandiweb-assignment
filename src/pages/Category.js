@@ -19,9 +19,6 @@ class Category extends React.Component {
     const category = params.get("category") || settings.category;
 
     if (this.state.category !== category) {
-      // console.log(
-      //   `Fetching Product (was: ${this.state.category}, will-be: ${category})`
-      // );
       this.setState({ category });
       settings.setCategory(category, true);
 

@@ -4,26 +4,33 @@ import Image from "./Image";
 
 class CartItem extends React.Component {
   render() {
-    const selections = [];
-
-    for (let key in this.props.selections) {
-      selections.push(
-        <div className="element" key={key}>
-          {this.props.selections[key]}
-        </div>
-      );
-    }
-
     return (
       <div className="cart-item">
         <div className="details">
           <h2 className="title">{this.props.brand}</h2>
           <h2 className="title">{this.props.name}</h2>
           <Price prices={this.props.prices} currency={this.props.currency} />
-          <div className="selections">{selections}</div>
+          <div className="selections">
+            {Object.keys(this.props.attributes).map((key) => {
+              const attribute = this.props.attributes[key];
+
+              return (
+                <div className={`element ${attribute.type}`} key={key}>
+                  {attribute.type === "swatch" ? (
+                    <div
+                      style={{ backgroundColor: attribute.selected.value }}
+                    ></div>
+                  ) : (
+                    attribute.selected.displayValue
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
         <div className="amount">
           <button
+            className="element"
             onClick={() =>
               this.props.updateAmount(
                 this.props.identifier,
@@ -33,8 +40,9 @@ class CartItem extends React.Component {
           >
             +
           </button>
-          {this.props.amount}
+          <h3 className="value">{this.props.amount}</h3>
           <button
+            className="element"
             onClick={() =>
               this.props.updateAmount(
                 this.props.identifier,
@@ -46,7 +54,7 @@ class CartItem extends React.Component {
           </button>
         </div>
         <div className="image">
-          <Image src={this.props.image} alt="" />
+          <Image src={this.props.gallery[0]} />
         </div>
       </div>
     );

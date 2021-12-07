@@ -5,6 +5,7 @@ const cartInitialState = {
   idCounter: {},
   add: () => {},
   updateAmount: () => {},
+  totalPrices: () => {},
 };
 
 export const CartContext = React.createContext(cartInitialState);
@@ -22,7 +23,10 @@ export function initializeCart(app) {
       let found = false;
 
       const items = app.state.cart.items.map((item) => {
-        if (item.id === newItem.id && sameSelections(item, newItem)) {
+        if (
+          item.id === newItem.id &&
+          sameSelections(item.attributes, newItem.attributes)
+        ) {
           found = true;
           return { ...item, amount: item.amount + newItem.amount };
         }
@@ -43,23 +47,42 @@ export function initializeCart(app) {
     },
 
     updateAmount: (identifier, amount) => {
-      const items = app.state.cart.items.map((item) => {
-        if (item.identifier === identifier) {
-          return { ...item, amount };
-        }
-        return item;
-      });
+      const items = app.state.cart.items
+        .map((item) => {
+          if (item.identifier === identifier) {
+            return { ...item, amount };
+          }
+          return item;
+        })
+        .filter((item) => item.amount > 0);
 
       app.setState((state) => ({ cart: { ...state.cart, items } }));
+    },
+    totalPrices: () => {
+      const totalPrices = {};
+
+      app.state.cart.items.forEach((item) => {
+        item.prices.forEach((price) => {
+          totalPrices[price.currency] =
+            Math.round(
+              ((totalPrices[price.currency] || 0) +
+                price.amount * item.amount) *
+                100
+            ) / 100;
+        });
+      });
+
+      return Object.keys(totalPrices).map((key) => ({
+        currency: key,
+        amount: totalPrices[key],
+      }));
     },
   };
 }
 
-function sameSelections(item1, item2) {
-  console.log(item1.selections === item2.selections);
-
-  for (let key in item1.selections) {
-    if (item1.selections[key] !== item2.selections[key]) {
+function sameSelections(attributes1, attributes2) {
+  for (let key in attributes1) {
+    if (attributes1[key].selected.id !== attributes2[key].selected.id) {
       return false;
     }
   }

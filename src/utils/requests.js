@@ -32,8 +32,10 @@ export function fetchProducts(category, { success, error }) {
       new Field("products").addFieldList([
         "id",
         "name",
+        "brand",
         "gallery",
         "inStock",
+        attributesField,
         pricesField,
       ])
     );

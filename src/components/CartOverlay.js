@@ -3,6 +3,7 @@ import React from "react";
 import cartIcon from "../assets/cart.svg";
 import { CartContext } from "../context/cart";
 import CartItem from "./CartItem";
+import Price from "./Price";
 
 class CartOverlay extends React.Component {
   static contextType = CartContext;
@@ -26,7 +27,9 @@ class CartOverlay extends React.Component {
         <button className="element" onClick={this.toggleMenu}>
           <img src={cartIcon} alt="cart" />
           {cart.items.length > 0 && (
-            <div className="badge">{cart.items.length}</div>
+            <div className="badge">
+              <h3 className="value">{cart.items.length}</h3>
+            </div>
           )}
         </button>
         {this.state.menuOpen && (
@@ -49,6 +52,13 @@ class CartOverlay extends React.Component {
                     updateAmount={cart.updateAmount}
                   />
                 ))}
+                <div className="total-price">
+                  <h3 className="label">total</h3>
+                  <Price
+                    prices={cart.totalPrices()}
+                    currency={this.props.currency}
+                  />
+                </div>
               </div>
             ) : (
               <h3 className="message">No items</h3>
