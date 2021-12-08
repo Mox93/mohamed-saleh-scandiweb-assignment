@@ -13,19 +13,46 @@ class CartOverlay extends React.Component {
     super(props);
 
     this.state = { menuOpen: false };
+
+    this.buttonRef = React.createRef();
+    this.wrapperRef = React.createRef();
   }
 
-  toggleMenu = () =>
-    this.setState((state) => ({
-      menuOpen: !state.menuOpen,
-    }));
+  setWrapperRef = (node) => (this.wrapperRef = node);
+
+  setButtonRef = (node) => (this.buttonRef = node);
+
+  toggleMenu = () => this.setState((state) => ({ menuOpen: !state.menuOpen }));
+
+  handleClickOutside = (event) => {
+    if (
+      this.wrapperRef &&
+      !this.wrapperRef.contains(event.target) &&
+      this.buttonRef &&
+      !this.buttonRef.contains(event.target)
+    ) {
+      this.setState(() => ({ menuOpen: false }));
+    }
+  };
+
+  componentDidUpdate() {
+    if (this.state.menuOpen) {
+      document.addEventListener("mousedown", this.handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", this.handleClickOutside);
+    }
+  }
 
   render() {
     const cart = this.context;
 
     return (
       <div className="dropdown">
-        <button className="element" onClick={this.toggleMenu}>
+        <button
+          className="element"
+          ref={this.setButtonRef}
+          onClick={this.toggleMenu}
+        >
           <img src={cartIcon} alt="cart" />
           {cart.items.length > 0 && (
             <div className="badge">
@@ -36,7 +63,7 @@ class CartOverlay extends React.Component {
         {this.state.menuOpen && (
           <div className="cart-menu">
             {cart.items.length > 0 ? (
-              <>
+              <div ref={this.setWrapperRef}>
                 <div className="content">
                   <h3 className="title">
                     My Bag,
@@ -50,6 +77,7 @@ class CartOverlay extends React.Component {
                     <CartItem
                       {...item}
                       key={item.uid}
+                      gallery={[item.gallery[0]]}
                       currency={this.props.currency}
                       updateAmount={cart.updateAmount}
                     />
@@ -67,20 +95,22 @@ class CartOverlay extends React.Component {
                     <Link
                       className="view-bag"
                       to={`/cart?${this.props.params}`}
+                      onClick={() => this.toggleMenu()}
                     >
                       view bag
                     </Link>
                     <button
                       className="check-out"
-                      onClick={() =>
-                        alert("WE'VE TAKEN ALL YOUR MONEY MWAHAHAHAHA!!!")
-                      }
+                      onClick={() => {
+                        this.toggleMenu();
+                        alert("WE'VE TAKEN ALL YOUR MONEY MWAHAHAHAHA!!!");
+                      }}
                     >
                       check out
                     </button>
                   </div>
                 </div>
-              </>
+              </div>
             ) : (
               <h3 className="message">No items</h3>
             )}

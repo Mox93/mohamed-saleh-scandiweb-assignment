@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import Price from "./Price";
 import Image from "./Image";
-import cartWhite from "../assets/cartWhite.svg";
+import cartWhite from "../assets/cart-white.svg";
 import { CartContext } from "../context/cart";
 
 class ProductItem extends React.Component {

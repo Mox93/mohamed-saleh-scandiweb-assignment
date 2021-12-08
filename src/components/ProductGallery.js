@@ -8,7 +8,7 @@ class ProductGallery extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.state.selected && this.props.gallery.length > 0)
+    if (this.props.gallery.length > 0)
       this.setState(() => ({ selected: this.props.gallery[0] }));
   }
 
