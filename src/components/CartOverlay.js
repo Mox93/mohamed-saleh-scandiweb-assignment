@@ -5,6 +5,7 @@ import cartIcon from "../assets/cart.svg";
 import { CartContext } from "../context/cart";
 import CartItem from "./CartItem";
 import Price from "./Price";
+import ProductSelections from "./ProductSelections";
 
 class CartOverlay extends React.Component {
   static contextType = CartContext;
@@ -80,6 +81,11 @@ class CartOverlay extends React.Component {
                       gallery={[item.gallery[0]]}
                       currency={this.props.currency}
                       updateAmount={cart.updateAmount}
+                      attributesComponent={
+                        <ProductSelections
+                          selectedAttributes={item.selectedAttributes}
+                        />
+                      }
                     />
                   ))}
                 </div>

@@ -14,11 +14,7 @@ class ProductDetails extends React.Component {
     const selectedAttributes = {};
 
     props.attributes.forEach((attribute) => {
-      selectedAttributes[attribute.id] = {
-        name: attribute.name,
-        type: attribute.type,
-        selected: null,
-      };
+      selectedAttributes[attribute.id] = null;
     });
 
     this.state = { selectedAttributes };
@@ -26,7 +22,7 @@ class ProductDetails extends React.Component {
 
   allAttributesSelected() {
     for (let key in this.state.selectedAttributes) {
-      if (this.state.selectedAttributes[key].selected === null) {
+      if (this.state.selectedAttributes[key] === null) {
         return false;
       }
     }
@@ -42,25 +38,21 @@ class ProductDetails extends React.Component {
         <h2 className="title">{this.props.brand}</h2>
         <h2 className="subtitle">{this.props.name}</h2>
         <div className="product-attributes">
-          {this.props.attributes.map((attribute, index) => (
+          {this.props.attributes.map((attribute) => (
             <div className="element" key={attribute.id}>
               <h3 className="label">{attribute.name}:</h3>
               <ProductAttributes
-                name={`attr${index}`}
+                name={attribute.name}
                 type={attribute.type}
                 items={attribute.items}
-                selected={this.state.selectedAttributes[attribute.id].selected}
+                selected={this.state.selectedAttributes[attribute.id]}
                 changeSelection={(selected) =>
-                  this.setState((state) => {
-                    const selectedAttributes = {
+                  this.setState((state) => ({
+                    selectedAttributes: {
                       ...state.selectedAttributes,
-                      [attribute.id]: {
-                        ...state.selectedAttributes[attribute.id],
-                        selected,
-                      },
-                    };
-                    return { selectedAttributes };
-                  })
+                      [attribute.id]: selected,
+                    },
+                  }))
                 }
                 disabled={!this.props.inStock}
               />
@@ -78,13 +70,9 @@ class ProductDetails extends React.Component {
           disabled={!(this.allAttributesSelected() && this.props.inStock)}
           onClick={() =>
             cart.add({
-              id: this.props.id,
-              brand: this.props.brand,
-              name: this.props.name,
-              prices: this.props.prices,
-              gallery: this.props.gallery,
+              item: this.props,
               amount: 1,
-              attributes: { ...this.state.selectedAttributes },
+              selectedAttributes: { ...this.state.selectedAttributes },
             })
           }
         >

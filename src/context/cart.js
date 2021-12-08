@@ -5,10 +5,33 @@ const cartInitialState = {
   idCounter: {},
   add: () => {},
   updateAmount: () => {},
+  updateAttributes: () => {},
   totalPrices: () => {},
 };
 
 export const CartContext = React.createContext(cartInitialState);
+
+function constructItem(item, amount, selectedAttributes) {
+  const selectedAttributes$ = {};
+
+  item.attributes.forEach((attribute) => {
+    selectedAttributes$[attribute.id] = {
+      ...selectedAttributes[attribute.id],
+      type: attribute.type,
+    };
+  });
+
+  return {
+    id: item.id,
+    brand: item.brand,
+    name: item.name,
+    prices: item.prices,
+    gallery: item.gallery,
+    attributes: item.attributes,
+    amount,
+    selectedAttributes: selectedAttributes$,
+  };
+}
 
 export function initializeCart(app) {
   return {
@@ -16,15 +39,19 @@ export function initializeCart(app) {
 
     ...fetchCart(),
 
-    add: (newItem) => {
+    add: ({ item: rawData, amount, selectedAttributes }) => {
+      console.log(selectedAttributes);
+
+      const newItem = constructItem(rawData, amount, selectedAttributes);
       const idCounter = { ...app.state.cart.idCounter };
 
       let found = false;
 
       const items = app.state.cart.items.map((item) => {
         if (
+          !found &&
           item.id === newItem.id &&
-          sameSelections(item.attributes, newItem.attributes)
+          sameSelections(item.selectedAttributes, newItem.selectedAttributes)
         ) {
           found = true;
           return { ...item, amount: item.amount + newItem.amount };
@@ -47,7 +74,7 @@ export function initializeCart(app) {
           idCounter,
         };
 
-        window.localStorage.setItem("cart", JSON.stringify(cart));
+        storeCart(cart);
 
         return { cart };
       });
@@ -63,8 +90,38 @@ export function initializeCart(app) {
         })
         .filter((item) => item.amount > 0);
 
-      app.setState((state) => ({ cart: { ...state.cart, items } }));
+      app.setState((state) => {
+        const cart = { ...state.cart, items };
+
+        storeCart(cart);
+        return { cart };
+      });
     },
+
+    updateAttributes: (uid, attributeId, selected) => {
+      console.log(selected);
+
+      const items = app.state.cart.items.map((item) => {
+        if (item.uid === uid) {
+          return {
+            ...item,
+            selectedAttributes: {
+              ...item.selectedAttributes,
+              [attributeId]: selected,
+            },
+          };
+        }
+        return item;
+      });
+
+      app.setState((state) => {
+        const cart = { ...state.cart, items };
+
+        storeCart(cart);
+        return { cart };
+      });
+    },
+
     totalPrices: () => {
       const totalPrices = {};
 
@@ -89,7 +146,7 @@ export function initializeCart(app) {
 
 function sameSelections(attributes1, attributes2) {
   for (let key in attributes1) {
-    if (attributes1[key].selected.id !== attributes2[key].selected.id) {
+    if (attributes1[key].id !== attributes2[key].id) {
       return false;
     }
   }
@@ -104,4 +161,8 @@ function fetchCart() {
     console.log(e);
     return {};
   }
+}
+
+function storeCart(cart) {
+  window.localStorage.setItem("cart", JSON.stringify(cart));
 }

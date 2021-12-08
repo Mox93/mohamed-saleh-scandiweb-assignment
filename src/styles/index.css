@@ -87,8 +87,10 @@ img.image,
   margin-top: 4px;
   padding: 4px;
   background-color: var(--c-text-xt);
+  color: var(--c-text);
   font-size: 14px;
   white-space: nowrap;
+  z-index: 2;
 }
 
 /* NAVBAR */
@@ -709,6 +711,11 @@ img.image,
   font-weight: 400;
 }
 
+.cart-page .cart-item .price {
+  font-size: 24px;
+  font-weight: 700;
+}
+
 .cart-page .cart-item .selections {
   display: flex;
   gap: 12px;
@@ -736,6 +743,7 @@ img.image,
 .cart-page .cart-item .left-side {
   display: flex;
   gap: 12px;
+  max-height: 300px;
 }
 
 .cart-page .cart-item .amount {

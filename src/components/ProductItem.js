@@ -25,24 +25,16 @@ class ProductItem extends React.Component {
           onClick={(e) => {
             e.preventDefault();
 
-            const attributes = {};
+            const selectedAttributes = {};
 
             this.props.attributes.forEach((attribute) => {
-              attributes[attribute.id] = {
-                name: attribute.name,
-                type: attribute.type,
-                selected: attribute.items[0],
-              };
+              selectedAttributes[attribute.id] = attribute.items[0];
             });
 
             cart.add({
-              id: this.props.id,
-              brand: this.props.brand,
-              name: this.props.name,
-              prices: this.props.prices,
-              gallery: this.props.gallery,
+              item: this.props,
               amount: 1,
-              attributes,
+              selectedAttributes,
             });
           }}
         >

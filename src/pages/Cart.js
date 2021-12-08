@@ -3,6 +3,7 @@ import React from "react";
 import { CartContext } from "../context/cart";
 import { SettingsContext } from "../context/settings";
 import CartItem from "../components/CartItem";
+import ProductAttributes from "../components/ProductAttributes";
 
 class Cart extends React.Component {
   render() {
@@ -21,6 +22,33 @@ class Cart extends React.Component {
                         key={item.uid}
                         currency={settings.currency}
                         updateAmount={cart.updateAmount}
+                        attributesComponent={
+                          <div className="product-attributes">
+                            {item.attributes.map((attribute) => (
+                              <div className="element" key={attribute.id}>
+                                <h3 className="label">{attribute.name}:</h3>
+                                <ProductAttributes
+                                  key={attribute.id}
+                                  name={attribute.name}
+                                  type={attribute.type}
+                                  items={attribute.items}
+                                  selected={
+                                    item.selectedAttributes[attribute.id]
+                                  }
+                                  changeSelection={(selected) => {
+                                    console.log(selected);
+                                    cart.updateAttributes(
+                                      item.uid,
+                                      attribute.id,
+                                      selected
+                                    );
+                                  }}
+                                  disabled={false}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        }
                       />
                     ))}
                   </div>
