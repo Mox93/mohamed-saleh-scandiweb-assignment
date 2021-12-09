@@ -40,7 +40,7 @@ class ProductItem extends React.Component {
         >
           <img src={cartWhite} alt="cart" />
         </button>
-        <h3 className="name">{this.props.name}</h3>
+        <h3 className="name">{`${this.props.brand} ${this.props.name}`}</h3>
         <Price prices={this.props.prices} currency={this.props.currency} />
       </Link>
     );

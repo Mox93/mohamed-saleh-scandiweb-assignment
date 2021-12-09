@@ -10,21 +10,17 @@ class CurrencySelector extends React.Component {
     this.state = { menuOpen: false };
 
     this.buttonRef = React.createRef();
-    this.wrapperRef = React.createRef();
+    this.menuRef = React.createRef();
   }
-
-  setWrapperRef = (node) => (this.wrapperRef = node);
-
-  setButtonRef = (node) => (this.buttonRef = node);
 
   toggleMenu = () => this.setState((state) => ({ menuOpen: !state.menuOpen }));
 
   handleClickOutside = (event) => {
     if (
-      this.wrapperRef &&
-      !this.wrapperRef.contains(event.target) &&
-      this.buttonRef &&
-      !this.buttonRef.contains(event.target)
+      this.menuRef.current &&
+      !this.menuRef.current.contains(event.target) &&
+      this.buttonRef.current &&
+      !this.buttonRef.current.contains(event.target)
     ) {
       this.setState(() => ({ menuOpen: false }));
     }
@@ -43,7 +39,7 @@ class CurrencySelector extends React.Component {
       <div className="dropdown">
         <button
           className="element currency"
-          ref={this.setButtonRef}
+          ref={this.buttonRef}
           onClick={this.toggleMenu}
         >
           {getCurrencySymbol(this.props.selected)}
@@ -54,7 +50,7 @@ class CurrencySelector extends React.Component {
           />
         </button>
         {this.state.menuOpen && (
-          <div className="currency-menu" ref={this.setWrapperRef}>
+          <div className="currency-menu" ref={this.menuRef}>
             {this.props.currencies.map((currency) => (
               <button
                 className="element"

@@ -7,6 +7,7 @@ const cartInitialState = {
   updateAmount: () => {},
   updateAttributes: () => {},
   totalPrices: () => {},
+  totalAmount: () => {},
 };
 
 export const CartContext = React.createContext(cartInitialState);
@@ -40,8 +41,6 @@ export function initializeCart(app) {
     ...fetchCart(),
 
     add: ({ item: rawData, amount, selectedAttributes }) => {
-      console.log(selectedAttributes);
-
       const newItem = constructItem(rawData, amount, selectedAttributes);
       const idCounter = { ...app.state.cart.idCounter };
 
@@ -140,6 +139,16 @@ export function initializeCart(app) {
         currency: key,
         amount: totalPrices[key],
       }));
+    },
+
+    totalAmount: () => {
+      let totalAmount = 0;
+
+      app.state.cart.items.forEach((item) => {
+        totalAmount = totalAmount + item.amount;
+      });
+
+      return totalAmount;
     },
   };
 }
