@@ -11,6 +11,7 @@ class Category extends React.Component {
   constructor(props) {
     super(props);
     this.state = { category: "", products: [] };
+    this.abortCont = new AbortController();
   }
 
   handleProducts() {
@@ -23,6 +24,7 @@ class Category extends React.Component {
       settings.setCategory(category, true);
 
       fetchProducts(category, {
+        signal: this.abortCont.signal,
         success: (products) => {
           this.setState(() => ({ products }));
         },
@@ -37,6 +39,10 @@ class Category extends React.Component {
 
   componentDidUpdate() {
     this.handleProducts();
+  }
+
+  componentWillUnmount() {
+    this.abortCont.abort();
   }
 
   render() {

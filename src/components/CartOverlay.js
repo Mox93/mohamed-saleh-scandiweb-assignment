@@ -1,11 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import cartIcon from "../assets/cart.svg";
 import { CartContext } from "../context/cart";
-import CartItem from "./CartItem";
-import Price from "./Price";
-import ProductSelections from "./ProductSelections";
+import CartMenu from "./CartMenu";
 
 class CartOverlay extends React.Component {
   static contextType = CartContext;
@@ -42,6 +39,7 @@ class CartOverlay extends React.Component {
 
   render() {
     const cart = this.context;
+    const totalAmount = cart.totalAmount();
 
     return (
       <div className="dropdown">
@@ -51,75 +49,20 @@ class CartOverlay extends React.Component {
           onClick={this.toggleMenu}
         >
           <img src={cartIcon} alt="cart" />
-          {cart.items.length > 0 && (
+          {totalAmount > 0 && (
             <div className="badge">
-              <h3 className="value">{cart.totalAmount()}</h3>
+              <h3 className="value">{totalAmount}</h3>
             </div>
           )}
         </button>
         {this.state.menuOpen && (
-          <div className="cart-menu">
-            <div ref={this.menuRef}>
-              {cart.items.length > 0 ? (
-                <>
-                  <div className="content">
-                    <h3 className="title">
-                      My Bag,
-                      <span>
-                        {` ${cart.items.length} item${
-                          cart.items.length > 1 ? "s" : ""
-                        }`}
-                      </span>
-                    </h3>
-                    {cart.items.map((item) => (
-                      <CartItem
-                        {...item}
-                        key={item.uid}
-                        gallery={[item.gallery[0]]}
-                        currency={this.props.currency}
-                        updateAmount={cart.updateAmount}
-                        attributesComponent={
-                          <ProductSelections
-                            selectedAttributes={item.selectedAttributes}
-                            attributes={item.attributes}
-                          />
-                        }
-                      />
-                    ))}
-                  </div>
-                  <div className="summery">
-                    <div className="total-price">
-                      <h3 className="label">total</h3>
-                      <Price
-                        prices={cart.totalPrices()}
-                        currency={this.props.currency}
-                      />
-                    </div>
-                    <div className="actions">
-                      <Link
-                        className="view-bag"
-                        to={`/cart?${this.props.params}`}
-                        onClick={() => this.toggleMenu()}
-                      >
-                        view bag
-                      </Link>
-                      <button
-                        className="check-out"
-                        onClick={() => {
-                          this.toggleMenu();
-                          alert("WE'VE TAKEN ALL YOUR MONEY MWAHAHAHAHA!!!");
-                        }}
-                      >
-                        check out
-                      </button>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <h3 className="no-items">No items</h3>
-              )}
-            </div>
-          </div>
+          <CartMenu
+            cart={cart}
+            menuRef={this.menuRef}
+            currency={this.props.currency}
+            params={this.props.params}
+            close={() => this.setState(() => ({ menuOpen: false }))}
+          />
         )}
       </div>
     );

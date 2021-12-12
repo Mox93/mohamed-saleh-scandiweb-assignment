@@ -11,10 +11,10 @@ class ProductSelections extends React.Component {
             <div className="element" key={attribute.id}>
               <h3 className="label">{attribute.name}</h3>
               <div
-                className={`value ${selectedAttribute.type}`}
+                className={`value ${attribute.type}`}
                 data-name-tip={attribute.name}
               >
-                {selectedAttribute.type === "swatch" ? (
+                {attribute.type === "swatch" ? (
                   <div
                     style={{ backgroundColor: selectedAttribute.value }}
                   ></div>

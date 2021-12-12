@@ -12,12 +12,14 @@ class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.abortCont = new AbortController();
   }
 
   componentDidMount() {
     const settings = this.context;
 
     fetchProduct(this.props.match.params.id, {
+      signal: this.abortCont.signal,
       success: (data) => {
         if (!data) {
           this.props.history.replace({
@@ -38,6 +40,10 @@ class Product extends React.Component {
     });
   }
 
+    componentWillUnmount() {
+    this.abortCont.abort();
+  }
+
   render() {
     const settings = this.context;
 
@@ -45,7 +51,7 @@ class Product extends React.Component {
       <div className="product-page container">
         {this.state.gallery && <ProductGallery gallery={this.state.gallery} />}
         {this.state.name && (
-          <ProductDetails {...this.state} currency={settings.currency} />
+          <ProductDetails data={this.state} currency={settings.currency} />
         )}
       </div>
     );

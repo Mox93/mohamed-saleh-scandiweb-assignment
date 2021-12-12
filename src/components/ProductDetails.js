@@ -13,7 +13,7 @@ class ProductDetails extends React.Component {
 
     const selectedAttributes = {};
 
-    props.attributes.forEach((attribute) => {
+    props.data.attributes.forEach((attribute) => {
       selectedAttributes[attribute.id] = null;
     });
 
@@ -32,56 +32,46 @@ class ProductDetails extends React.Component {
 
   render() {
     const cart = this.context;
+    const data = this.props.data;
 
     return (
       <div className="product-details">
-        <h2 className="title">{this.props.brand}</h2>
-        <h2 className="subtitle">{this.props.name}</h2>
-        <div className="product-attributes">
-          {this.props.attributes.map((attribute) => (
-            <div className="element" key={attribute.id}>
-              <h3 className="label">{attribute.name}:</h3>
-              <ProductAttributes
-                name={attribute.name}
-                type={attribute.type}
-                items={attribute.items}
-                selected={this.state.selectedAttributes[attribute.id]}
-                changeSelection={(selected) =>
-                  this.setState((state) => ({
-                    selectedAttributes: {
-                      ...state.selectedAttributes,
-                      [attribute.id]: selected,
-                    },
-                  }))
-                }
-                disabled={!this.props.inStock}
-              />
-            </div>
-          ))}
-        </div>
+        <h2 className="title">{data.brand}</h2>
+        <h2 className="subtitle">{data.name}</h2>
+        <ProductAttributes
+          attributes={data.attributes}
+          selectedAttributes={this.state.selectedAttributes}
+          changeSelection={(attributeId, selected) =>
+            this.setState((state) => ({
+              selectedAttributes: {
+                ...state.selectedAttributes,
+                [attributeId]: selected,
+              },
+            }))
+          }
+          disabled={!data.inStock}
+        />
         <div className="product-price">
-          <h3 className="label">Price:</h3>
-          <Price prices={this.props.prices} currency={this.props.currency} />
+          <h3 className="label">price:</h3>
+          <Price prices={data.prices} currency={this.props.currency} />
         </div>
         <button
-          className={`call-to-action ${
-            this.props.inStock ? "" : "out-of-stoke"
-          }`}
-          disabled={!(this.allAttributesSelected() && this.props.inStock)}
+          className={`call-to-action ${data.inStock ? "" : "out-of-stoke"}`}
+          disabled={!(this.allAttributesSelected() && data.inStock)}
           onClick={() =>
             cart.add({
-              item: this.props,
+              item: data,
               amount: 1,
               selectedAttributes: { ...this.state.selectedAttributes },
             })
           }
         >
-          {this.props.inStock ? "add to cart" : "out of stock"}
+          {data.inStock ? "add to cart" : "out of stock"}
         </button>
         <div
           className="description"
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(this.props.description),
+            __html: DOMPurify.sanitize(data.description),
           }}
         />
       </div>

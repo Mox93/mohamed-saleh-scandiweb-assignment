@@ -78,7 +78,7 @@ function fetchCurrency() {
   try {
     return window.localStorage.getItem("currency").toLowerCase();
   } catch (e) {
-    console.log("");
+    console.log(e);
     return "";
   }
 }

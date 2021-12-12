@@ -98,8 +98,6 @@ export function initializeCart(app) {
     },
 
     updateAttributes: (uid, attributeId, selected) => {
-      console.log(selected);
-
       const items = app.state.cart.items.map((item) => {
         if (item.uid === uid) {
           return {

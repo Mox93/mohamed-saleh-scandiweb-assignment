@@ -23,31 +23,18 @@ class Cart extends React.Component {
                         currency={settings.currency}
                         updateAmount={cart.updateAmount}
                         attributesComponent={
-                          <div className="product-attributes">
-                            {item.attributes.map((attribute) => (
-                              <div className="element" key={attribute.id}>
-                                <h3 className="label">{attribute.name}:</h3>
-                                <ProductAttributes
-                                  key={attribute.id}
-                                  name={attribute.name}
-                                  type={attribute.type}
-                                  items={attribute.items}
-                                  selected={
-                                    item.selectedAttributes[attribute.id]
-                                  }
-                                  changeSelection={(selected) => {
-                                    console.log(selected);
-                                    cart.updateAttributes(
-                                      item.uid,
-                                      attribute.id,
-                                      selected
-                                    );
-                                  }}
-                                  disabled={false}
-                                />
-                              </div>
-                            ))}
-                          </div>
+                          <ProductAttributes
+                            attributes={item.attributes}
+                            selectedAttributes={item.selectedAttributes}
+                            changeSelection={(attributeId, selected) => {
+                              cart.updateAttributes(
+                                item.uid,
+                                attributeId,
+                                selected
+                              );
+                            }}
+                            disabled={false}
+                          />
                         }
                       />
                     ))}

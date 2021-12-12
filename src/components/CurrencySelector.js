@@ -2,6 +2,7 @@ import React from "react";
 
 import arrow from "../assets/arrow.svg";
 import { getCurrencySymbol } from "../utils";
+import CurrencyMenu from "./CurrencyMenu";
 
 class CurrencySelector extends React.Component {
   constructor(props) {
@@ -50,21 +51,10 @@ class CurrencySelector extends React.Component {
           />
         </button>
         {this.state.menuOpen && (
-          <div className="currency-menu" ref={this.menuRef}>
-            {this.props.currencies.map((currency) => (
-              <button
-                className="element"
-                key={currency}
-                onClick={() => {
-                  this.props.setCurrency(currency);
-                  this.toggleMenu();
-                }}
-              >
-                <div className="symbol">{getCurrencySymbol(currency, "")}</div>
-                <div className="value">{currency}</div>
-              </button>
-            ))}
-          </div>
+          <CurrencyMenu
+            {...this.props}
+            close={() => this.setState(() => ({ menuOpen: false }))}
+          />
         )}
       </div>
     );

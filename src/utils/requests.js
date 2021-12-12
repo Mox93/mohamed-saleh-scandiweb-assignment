@@ -25,7 +25,7 @@ export function fetchSettings({ success, error }) {
     .catch((err) => error(err));
 }
 
-export function fetchProducts(category, { success, error }) {
+export function fetchProducts(category, { success, error, signal }) {
   const products = new Query("category")
     .addArgument("input", "CategoryInput", { title: category })
     .addField(
@@ -41,12 +41,12 @@ export function fetchProducts(category, { success, error }) {
     );
 
   client
-    .post(products)
+    .post(products, { signal })
     .then((result) => success(result.category.products))
     .catch((err) => error(err));
 }
 
-export function fetchProduct(id, { success, error }) {
+export function fetchProduct(id, { success, error, signal }) {
   const product = new Query("product")
     .addArgument("id", "String!", id)
     .addFieldList([
@@ -62,7 +62,7 @@ export function fetchProduct(id, { success, error }) {
     ]);
 
   client
-    .post(product)
+    .post(product, { signal })
     .then((result) => success(result.product))
     .catch((err) => error(err));
 }
